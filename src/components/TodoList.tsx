@@ -30,7 +30,7 @@ export const TodoList: React.FC<Props> = ({
   const editor = (todo: Todo) => {
     setEditingId(todo.id);
     setEditInput(todo.title);
-    setOriginalTitle(todo.title)
+    setOriginalTitle(todo.title);
   };
 
   const cancelEdit = () => {
@@ -44,63 +44,66 @@ export const TodoList: React.FC<Props> = ({
   };
 
   const handleSave = useCallback(() => {
-  if (editingId === undefined) return;
+    if (editingId === undefined) {
+      return;
+    }
 
-  const trimmed = editInput.trim();
+    const trimmed = editInput.trim();
 
-  if (trimmed === '') {
-    deleteTodo(editingId)
+    if (trimmed === '') {
+      deleteTodo(editingId)
+        .then(() => {
+          setEditingId(undefined);
+          setEditInput('');
+          setOriginalTitle('');
+
+          // 👇 Викликаємо фокус лише після всього
+          setTimeout(() => {
+            headerInputRef.current?.focus();
+          }, 0);
+        })
+        .catch(() => {
+          // опціонально: обробка помилки
+        });
+
+      return;
+    }
+
+    if (trimmed === originalTitle.trim()) {
+      setEditingId(undefined);
+      setEditInput('');
+      setOriginalTitle('');
+
+      return;
+    }
+
+    updateTodoTitle(editingId, trimmed)
       .then(() => {
         setEditingId(undefined);
         setEditInput('');
         setOriginalTitle('');
-
-        // 👇 Викликаємо фокус лише після всього
-        setTimeout(() => {
-          headerInputRef.current?.focus();
-        }, 0);
       })
       .catch(() => {
-        // опціонально: обробка помилки
+        if (trimmed === originalTitle.trim()) {
+          setEditingId(undefined);
+          setEditInput('');
+          setOriginalTitle('');
+        }
       });
-
-    return;
-  }
-
-  if (trimmed === originalTitle.trim()) {
-    setEditingId(undefined);
-    setEditInput('');
-    setOriginalTitle('');
-    return;
-  }
-
-  updateTodoTitle(editingId, trimmed)
-    .then(() => {
-      setEditingId(undefined);
-      setEditInput('');
-      setOriginalTitle('');
-    })
-    .catch(() => {
-      if (trimmed === originalTitle.trim()) {
-        setEditingId(undefined);
-        setEditInput('');
-        setOriginalTitle('');
-      }
-    });
-}, [
-  editInput,
-  editingId,
-  originalTitle,
-  updateTodoTitle,
-  deleteTodo,
-  headerInputRef,
-]);
+  }, [
+    editInput,
+    editingId,
+    originalTitle,
+    updateTodoTitle,
+    deleteTodo,
+    headerInputRef,
+  ]);
 
   useEffect(() => {
     if (editingId !== undefined && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [editingId]);
+  }, [editingId, inputRef]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

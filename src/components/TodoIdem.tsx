@@ -1,7 +1,9 @@
-import classNames from "classnames";
-import { Loader } from "./Loader";
-import { Todo } from "../types/Todo";
-import { ChangeEvent } from "react";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import classNames from 'classnames';
+import { Loader } from './Loader';
+import { Todo } from '../types/Todo';
+import { ChangeEvent } from 'react';
 
 type Props = {
   todo: Todo;

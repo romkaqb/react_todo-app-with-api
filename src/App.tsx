@@ -96,7 +96,7 @@ export const App: React.FC = () => {
     todosToUpdate.forEach(todo => addLoading(todo.id));
 
     const updatePromises = todosToUpdate.map(todo =>
-      patchTodo(todo.id, { completed: allCompleted ? false : true })
+      patchTodo(todo.id, { completed: allCompleted ? false : true }),
     );
 
     Promise.allSettled(updatePromises)
@@ -114,8 +114,9 @@ export const App: React.FC = () => {
         setTodos(prev =>
           prev.map(todo => {
             const updated = succeededTodos.find(t => t.id === todo.id);
+
             return updated ? updated : todo;
-          })
+          }),
         );
       })
       .finally(() => {
@@ -214,7 +215,7 @@ export const App: React.FC = () => {
       })
       .finally(() => removeLoading(id));
   };
-  
+
   const handleError = () => {
     setError(null);
   };
