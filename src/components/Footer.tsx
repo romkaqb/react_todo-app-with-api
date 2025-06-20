@@ -1,6 +1,7 @@
 import React from 'react';
 import { Todo } from '../types/Todo';
 import { Status } from '../types/Status';
+import classNames from 'classnames';
 
 type Props = {
   todos: Todo[];
@@ -34,12 +35,9 @@ export const Footer: React.FC<Props> = ({
             <a
               key={s}
               href={href}
-              className={`filter__link${isSelected ? ' selected' : ''}`}
+              className={classNames('filter__link', {'selected' : isSelected})}
               data-cy={dataCy}
-              onClick={e => {
-                e.preventDefault();
-                setFilter(s);
-              }}
+              onClick={() => setFilter(s)}
             >
               {s}
             </a>
@@ -52,11 +50,7 @@ export const Footer: React.FC<Props> = ({
         className="todoapp__clear-completed"
         data-cy="ClearCompletedButton"
         disabled={!hasCompleted}
-        onClick={() => {
-          if (clearCompleted) {
-            clearCompleted();
-          }
-        }}
+        onClick={clearCompleted}
       >
         Clear completed
       </button>

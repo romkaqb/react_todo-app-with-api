@@ -57,13 +57,11 @@ export const TodoList: React.FC<Props> = ({
           setEditInput('');
           setOriginalTitle('');
 
-          // 👇 Викликаємо фокус лише після всього
           setTimeout(() => {
             headerInputRef.current?.focus();
           }, 0);
         })
         .catch(() => {
-          // опціонально: обробка помилки
         });
 
       return;

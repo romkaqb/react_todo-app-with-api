@@ -3,7 +3,7 @@
 import classNames from 'classnames';
 import { Loader } from './Loader';
 import { Todo } from '../types/Todo';
-import { ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 
 type Props = {
   todo: Todo;
@@ -32,6 +32,15 @@ export const TodoItem: React.FC<Props> = ({
   inputRef,
   cancelEdit,
 }) => {
+  const HandleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSave();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      cancelEdit();
+    }
+  }
   return (
     <div
       data-cy="Todo"
@@ -65,15 +74,7 @@ export const TodoItem: React.FC<Props> = ({
             placeholder="Empty todo will be deleted"
             value={editInput}
             onChange={handleEditInput}
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSave();
-              } else if (e.key === 'Escape') {
-                e.preventDefault();
-                cancelEdit();
-              }
-            }}
+            onKeyDown={HandleKeyDown}
             onBlur={handleSave}
           />
         </form>

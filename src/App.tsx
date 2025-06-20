@@ -67,19 +67,16 @@ export const App: React.FC = () => {
   }
 
   const filteredTodos = todos.filter(todo => {
-    if (filter === Status.All) {
-      return true;
+    switch (filter) {
+      case Status.All:
+        return true;
+      case Status.Active:
+        return !todo.completed;
+      case Status.Completed:
+        return todo.completed;
+      default:
+        return true;
     }
-
-    if (filter === Status.Active) {
-      return !todo.completed;
-    }
-
-    if (filter === Status.Completed) {
-      return todo.completed;
-    }
-
-    return true;
   });
 
   const ToggleAllTodos = () => {
